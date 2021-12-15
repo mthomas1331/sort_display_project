@@ -7,7 +7,9 @@ import java.util.Collections;
 import java.util.List;
 
 //outer class BinaryTree
-public class BinaryTree extends Sorter implements IBinaryTree{
+public class BinaryTree implements IBinaryTree, Sorter {
+
+
     //Inner class Node
     public static class Node {
         //outer class variable declaration
@@ -50,16 +52,15 @@ public class BinaryTree extends Sorter implements IBinaryTree{
     //outer class variable declaration
     private Node rootNode;
     private int totalCount = 1, counterDecrement = 0;
-    private List<Integer> intList;
+    //private List<Integer> intList;
     private int[] unsortedToSortedArray;
 
     public BinaryTree(int[] unsortedArray) {
-        this.unsortedToSortedArray = unsortedArray;
-        addElements(unsortedToSortedArray);
+        addElements(unsortedArray);
         //This is initialised so that array can be sorted in ascending order
         //This is decrement not increment due to recursion used
-        counterDecrement = getCount() - 1;
-        getSortedTreeAsc();
+        setTotalCount(unsortedArray.length);
+        unsortedToSortedArray = getSortedTreeAsc();
     }
 
     @Override
@@ -97,42 +98,28 @@ public class BinaryTree extends Sorter implements IBinaryTree{
 
     @Override
     public int[] getSortedTreeAsc() {
-
         //start new traversal code for binary tree
         unsortedToSortedArray = new int[getCount()];
+        counterDecrement = getCount() - 1;
         //do execution time for traversal start here
-
         recursiveCall(rootNode);
         //end execution time for traversal
-        setSortedArray(unsortedToSortedArray);
-
-
-        //returns the convert to int array method
-        //return convertToIntArray(intList);
-        return getSortedArray();
+        return unsortedToSortedArray;
     }
 
     @Override
     public int[] getSortedTreeDesc() {
-        intList = new ArrayList<>();
-        //recursive method call
-        recursiveCall(rootNode);
-        //easy sort to descending order
-        intList.sort(Collections.reverseOrder());
-        //returns the convert to int array method
-        return convertToIntArray(intList);
+        int[] descSortedArray = new int[getCount()];
+       int[] reverseArray = getSortedTreeAsc();
+        for (int i = 0; i < reverseArray.length; i++) {
+            descSortedArray[i] = reverseArray[getCount() - 1];
+        }
+        return descSortedArray;
     }
 
-    //method for converting into int array from List
-    private int[] convertToIntArray(List<Integer> intList){
-        int itr = 0;
-        int[] sortedArray = new int[intList.size()];
-        //convert into int array from list
-        for (Integer value: intList) {
-            sortedArray[itr] = value;
-            itr++;
-        }
-        return sortedArray;
+    @Override
+    public int[] sortArray() {
+        return getSortedTreeAsc();
     }
 
     //go through this method once again - convoluted understanding
@@ -141,11 +128,8 @@ public class BinaryTree extends Sorter implements IBinaryTree{
         if (!currentNode.isRightChildEmpty()){
             recursiveCall(currentNode.getRightChild());
         }
-        //add to List here as the code should go through here all the time.
-        //intList.add(currentNode.getValue());
         unsortedToSortedArray[counterDecrement] = currentNode.getValue();
         counterDecrement--;
-
         //traverse through the left child nodes until the end
         if (!currentNode.isLeftChildEmpty()){
             recursiveCall(currentNode.getLeftChild());
@@ -176,18 +160,22 @@ public class BinaryTree extends Sorter implements IBinaryTree{
         return null;
     }
 
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
+
     private void addNodeToTree(Node node, int element){
         if (element <= node.getValue()) {
             if(node.isLeftChildEmpty()){
                 node.setLeftChild(new Node(element));
-                totalCount++;
+                //totalCount++;
             } else {
                 addNodeToTree(node.getLeftChild(), element);
             }
         } else if (element > node.getValue()) {
             if (node.isRightChildEmpty()){
                 node.setRightChild(new Node(element));
-                totalCount++;
+                //totalCount++;
             } else {
                 addNodeToTree(node.getRightChild(), element);
             }
