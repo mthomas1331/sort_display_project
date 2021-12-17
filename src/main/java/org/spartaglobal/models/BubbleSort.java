@@ -21,7 +21,7 @@ public class BubbleSort implements ISorter {
             PrintLoader.printDisplaySortedArray(getUnsortedArrayToSortedArray());
             PrintLoader.printExecutionTimeOfSortingAlgorithm(ExecutionTime.getTotalTimeOfExecution());
         } catch (NullPointerException e) {
-                e.getLocalizedMessage();
+                PrintLoader.nullPointerExceptionMessage(e);
         }
       }
 

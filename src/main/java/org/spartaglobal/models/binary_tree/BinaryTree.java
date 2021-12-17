@@ -75,7 +75,7 @@ public class BinaryTree implements IBinaryTree, ISorter {
             PrintLoader.printDisplaySortedArray(getUnsortedToSortedArray());
             PrintLoader.printExecutionTimeOfSortingAlgorithm(ExecutionTime.getTotalTimeOfExecution());
         } catch (NullPointerException e) {
-            System.out.println(e.getLocalizedMessage());
+            PrintLoader.nullPointerExceptionMessage(e);
         }
     }
     /**
@@ -208,7 +208,7 @@ public class BinaryTree implements IBinaryTree, ISorter {
      */
     @Override
     public int[] getSortedTreeDesc() {
-        int[] descSortedArray = new int[getCount()];
+       int[] descSortedArray = new int[getCount()];
        int[] reverseArray = getSortedTreeAsc();
         for (int i = 0; i < reverseArray.length; i++) {
             descSortedArray[i] = reverseArray[getCount() - 1];
@@ -218,12 +218,12 @@ public class BinaryTree implements IBinaryTree, ISorter {
 
     //go through this method once again - convoluted understanding
 
-    /**
-     * This method checks whether left/right child node is empty and if not, it calls itself
-     * by assigning the current node as the child node. It keeps doing this until there are
-     * no more child nodes at which point it is added to the array.
-     * @param currentNode starting node
-     */
+   /**
+    * This method checks whether left/right child node is empty and if not, it calls itself
+    * by assigning the current node as the child node. It keeps doing this until there are
+    * no more child nodes at which point it is added to the array.
+    * @param currentNode starting node
+    */
     private void recursiveCall(Node currentNode){
         //traverse through the right child nodes until the end
         if (!currentNode.isRightChildEmpty()){
@@ -314,5 +314,4 @@ public class BinaryTree implements IBinaryTree, ISorter {
     public int[] sortArray() {
         return getUnsortedToSortedArray();
     }
-
 }
