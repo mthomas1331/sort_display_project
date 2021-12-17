@@ -8,6 +8,8 @@ import java.util.Scanner;
  *
  */
 public class SortManager {
+
+    static final int LIMIT = 100;
     /**
      * This is method called which allows the program to receive inputs from the user
      * and display the output accordingly.
@@ -44,10 +46,10 @@ public class SortManager {
      */
     public static int[] initialiseRandomArray(int arraySizeLimit){
         Random random = new Random();
-        int[] randomArray = new int[random.nextInt(arraySizeLimit)];
+        int[] randomArray = new int[arraySizeLimit];
         try {
             for (int i = 0; i < randomArray.length; i++) {
-                randomArray[i] = random.nextInt(arraySizeLimit);
+                randomArray[i] = random.nextInt(LIMIT);
             }
         } catch (NullPointerException e) {
             System.out.println(e.getLocalizedMessage());
