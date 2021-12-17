@@ -1,4 +1,4 @@
-package org.spartaglobal.models.BinaryTree;
+package org.spartaglobal.models.binary_tree;
 import org.spartaglobal.controllers.ChildNotFoundException;
 
 /**
@@ -15,7 +15,7 @@ public interface IBinaryTree {
 
     void addElements(final int[] elements);
 
-    boolean findElement(int value);
+    boolean findElement(int element);
 
     int getLeftChild(int element) throws ChildNotFoundException;
 
