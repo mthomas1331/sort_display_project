@@ -1,39 +1,61 @@
 package org.spartaglobal.controllers;
-
+import org.spartaglobal.views.PrintLoader;
+import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * @implNote This is where the bulk of the program is called to run from App
+ *
+ */
 public class SortManager {
 
-    private Scanner userInput;
-    int[] unsortedArray;
-
-    public SortManager() {
-        intialiseUserInputs();
-    }
-    //my method for initialising console input - create separate class for printing outputs later down the line
-
-    private void intialiseUserInputs() {
-        this.userInput = new Scanner(System.in);
+    static final int LIMIT = 100;
+    /**
+     * This is method called which allows the program to receive inputs from the user
+     * and display the output accordingly.
+     * There is a while loop that keeps running the program until the user enters 0 which is the quit command
+     * User can currently only select 1, 2, 3 as numbers to proceed with rest of the program
+     */
+    public static void initialiseUserInputs(){
+        //open scanner class connection
+        Scanner userInput = new Scanner(System.in);
         boolean runProgram = true;
-        int optionchoice;
-
-        while(runProgram) {
-                System.out.println("Choose the following option for sort: \n 0: Quit the program  \n 1: Bubble Sort \n 2: Insertion Sort \n 3: Binary Tree");
-           optionchoice = userInput.nextInt();
-            if (optionchoice > 3 || optionchoice < 0) {
-                System.out.println("You entered a wrong option that isn't available please try again");
-            } else if (optionchoice == 0) {
+        int optionChoice, arraySizeChoice;
+        while (runProgram) {
+            PrintLoader.printChoiceQuestion();
+            optionChoice = userInput.nextInt();
+            if (optionChoice > 3 || optionChoice < 0) {
+                PrintLoader.printWrongOptionMessage();
+            } else if (optionChoice == 0) {
                 runProgram = false;
-                System.out.println("You have decided to quit the program. Thank you for using this program");
+                PrintLoader.printExitMessage();
             } else {
-                SortFactory.getSorterAlgorithm(optionchoice, unsortedArray);
+                PrintLoader.printLengthOfArrayQuestion();
+                arraySizeChoice = userInput.nextInt();
+                SortFactory.getSorterAlgorithm(optionChoice, initialiseRandomArray(arraySizeChoice));
             }
         }
-
-        //int optionNumber = userInput.nextInt();
-        System.out.println("End of program");
-
+        //always close connection after opening it
+        userInput.close();
     }
 
-
+    /**
+     * This method is used to generate a random array for the program to use as the initial array
+     * @param arraySizeLimit Size of the array
+     * @return int random array of {@param arraySizeLimit}
+     */
+    public static int[] initialiseRandomArray(int arraySizeLimit){
+        Random random = new Random();
+        int[] randomArray = new int[arraySizeLimit];
+        try {
+            for (int i = 0; i < randomArray.length; i++) {
+                randomArray[i] = random.nextInt(LIMIT);
+            }
+        } catch (NullPointerException e) {
+            System.out.println(e.getLocalizedMessage());
+            System.out.println("Start the program again");
+            initialiseUserInputs();
+        }
+        return randomArray;
     }
+}
