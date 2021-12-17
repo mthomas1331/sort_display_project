@@ -21,7 +21,7 @@ public class MergeSort implements ISorter {
             PrintLoader.printDisplaySortedArray(getFinalSortedArray());
             PrintLoader.printExecutionTimeOfSortingAlgorithm(ExecutionTime.getTotalTimeOfExecution());
         } catch (NullPointerException e) {
-            e.getMessage();
+            PrintLoader.nullPointerExceptionMessage(e);
         }
     }
 
