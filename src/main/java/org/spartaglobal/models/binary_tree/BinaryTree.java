@@ -1,15 +1,11 @@
 package org.spartaglobal.models.BinaryTree;
+import org.spartaglobal.controllers.ChildNotFoundException;
+import org.spartaglobal.controllers.ExecutionTime;
 import org.spartaglobal.models.*;
+import org.spartaglobal.views.PrintLoader;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-//outer class BinaryTree
-public class BinaryTree implements IBinaryTree, Sorter {
-
-
+//outer class BinaryTree - use of nested class
+public class BinaryTree implements IBinaryTree, ISorter {
     //Inner class Node
     public static class Node {
         //outer class variable declaration
@@ -55,12 +51,22 @@ public class BinaryTree implements IBinaryTree, Sorter {
     //private List<Integer> intList;
     private int[] unsortedToSortedArray;
 
+    public int[] getUnsortedToSortedArray() {
+        return unsortedToSortedArray;
+    }
+
+    public void setUnsortedToSortedArray(int[] unsortedToSortedArray) {
+        this.unsortedToSortedArray = unsortedToSortedArray;
+    }
+
     public BinaryTree(int[] unsortedArray) {
-        addElements(unsortedArray);
-        //This is initialised so that array can be sorted in ascending order
-        //This is decrement not increment due to recursion used
-        setTotalCount(unsortedArray.length);
-        unsortedToSortedArray = getSortedTreeAsc();
+            addElements(unsortedArray);
+            //This is initialised so that array can be sorted in ascending order
+            //This is decrement not increment due to recursion used
+            setTotalCount(unsortedArray.length);
+            setUnsortedToSortedArray(getSortedTreeAsc());
+            PrintLoader.printDisplaySortedArray(getUnsortedToSortedArray());
+            PrintLoader.printExecutionTimeOfSortingAlgorithm(ExecutionTime.getTotalTimeOfExecution());
     }
 
     @Override
@@ -77,7 +83,6 @@ public class BinaryTree implements IBinaryTree, Sorter {
     public void addElement(final int element) {
         addNodeToTree(rootNode, element);
     }
-
 
     @Override
     public void addElements(int[] elements) {
@@ -97,13 +102,36 @@ public class BinaryTree implements IBinaryTree, Sorter {
     }
 
     @Override
+    public int getLeftChild(int element) throws ChildNotFoundException {
+        try {
+            Node currentNode = findNode(element);
+            return currentNode.getLeftChild().getValue();
+        } catch (NullPointerException e) {
+            throw new ChildNotFoundException("Left Child Node does not exist for this element", e);
+        }
+    }
+
+    @Override
+    public int getRightChild(int element) throws ChildNotFoundException {
+        try {
+            Node currentNode = findNode(element);
+            return currentNode.getRightChild().getValue();
+        } catch (NullPointerException e) {
+            throw new ChildNotFoundException("Right Child Node does not exist for this element", e);
+        }
+    }
+
+    @Override
     public int[] getSortedTreeAsc() {
         //start new traversal code for binary tree
         unsortedToSortedArray = new int[getCount()];
         counterDecrement = getCount() - 1;
         //do execution time for traversal start here
+        ExecutionTime.startTime = System.nanoTime();
         recursiveCall(rootNode);
         //end execution time for traversal
+        ExecutionTime.endTime = System.nanoTime();
+        ExecutionTime.setTotalTimeOfExecution(ExecutionTime.startTime,ExecutionTime.endTime);
         return unsortedToSortedArray;
     }
 
@@ -115,11 +143,6 @@ public class BinaryTree implements IBinaryTree, Sorter {
             descSortedArray[i] = reverseArray[getCount() - 1];
         }
         return descSortedArray;
-    }
-
-    @Override
-    public int[] sortArray() {
-        return getSortedTreeAsc();
     }
 
     //go through this method once again - convoluted understanding
@@ -182,5 +205,10 @@ public class BinaryTree implements IBinaryTree, Sorter {
         }
     }
 
+    //Interface method used for testing purposes
+    @Override
+    public int[] sortArray() {
+        return getUnsortedToSortedArray();
+    }
 
 }

@@ -3,9 +3,19 @@ import org.spartaglobal.views.PrintLoader;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * @implNote This is where the bulk of the program is called to run from App
+ *
+ */
 public class SortManager {
-
-    public static void initialiseUserInputs() {
+    /**
+     * This is method called which allows the program to receive inputs from the user
+     * and display the output accordingly.
+     * There is a while loop that keeps running the program until the user enters 0 which is the quit command
+     * User can currently only select 1, 2, 3 as numbers to proceed with rest of the program
+     */
+    public static void initialiseUserInputs(){
+        //open scanner class connection
         Scanner userInput = new Scanner(System.in);
         boolean runProgram = true;
         int optionChoice, arraySizeChoice;
@@ -27,14 +37,23 @@ public class SortManager {
         userInput.close();
     }
 
-    //Initiate a random array to be used for the sort at runtime
+    /**
+     * This method is used to generate a random array for the program to use as the initial array
+     * @param arraySizeLimit Size of the array
+     * @return int random array of {@param arraySizeLimit}
+     */
     public static int[] initialiseRandomArray(int arraySizeLimit){
         Random random = new Random();
         int[] randomArray = new int[random.nextInt(arraySizeLimit)];
-        for (int i = 0; i < randomArray.length; i++) {
-            randomArray[i] = random.nextInt(arraySizeLimit);
+        try {
+            for (int i = 0; i < randomArray.length; i++) {
+                randomArray[i] = random.nextInt(arraySizeLimit);
+            }
+        } catch (NullPointerException e) {
+            System.out.println(e.getLocalizedMessage());
+            System.out.println("Start the program again");
+            initialiseUserInputs();
         }
         return randomArray;
     }
-
 }
